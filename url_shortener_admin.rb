@@ -46,21 +46,28 @@ class URLShortenerAdmin < Sinatra::Base
   post '/admin/url/new' do
     name = params['name']
     key = params['key']
-    url = params['url']
+    target = params['target']
     utm_campaign = params['utm_campaign']
     utm_source = params['utm_source']
     utm_medium = params['utm_medium']
     if utm_campaign and utm_source and utm_medium
-      url = "#{url}?utm_source=#{utm_source}&utm_medium=#{utm_medium}&utm_campaign=#{utm_campaign}"
+      target = "#{target}?utm_source=#{utm_source}&utm_medium=#{utm_medium}&utm_campaign=#{utm_campaign}"
     end
-    if name and name != '' and url and url != ''
+    if name and name != '' and target and target != ''
       if key and key == ''
+        #there are 46656 possible combinations
         key = rand(36**3).to_s(36)
+        while URLStore.find(key)
+          key = rand(36**3).to_s(36)
+        end
+      else
+        halt 400 if URLStore.find(key)
       end
-      URLStore.set({name: name, key: key, url: url})
+      URLStore.set({name: name, key: key, target: target})
       redirect '/admin'
     else
       halt 400
     end
   end
+
 end
