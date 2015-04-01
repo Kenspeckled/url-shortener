@@ -4,7 +4,9 @@ class URLStore
   @redis = Redis.new
 
   def self.find(key)
-    @redis.hgetall("key:#{key}")
+    url_hash = @redis.hgetall("key:#{key}")
+    return nil if url_hash.empty?
+    url_hash
   end
 
   def self.set(args)
