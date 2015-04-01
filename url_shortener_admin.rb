@@ -50,7 +50,7 @@ class URLShortenerAdmin < Sinatra::Base
     utm_campaign = params['utm_campaign']
     utm_source = params['utm_source']
     utm_medium = params['utm_medium']
-    if utm_campaign and utm_source and utm_medium
+    if utm_campaign != '' and utm_source != '' and utm_medium != ''
       target = "#{target}?utm_source=#{utm_source}&utm_medium=#{utm_medium}&utm_campaign=#{utm_campaign}"
     end
     if name and name != '' and target and target != ''
