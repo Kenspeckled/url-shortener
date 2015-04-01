@@ -55,7 +55,7 @@ class URLShortenerAdmin < Sinatra::Base
     end
     if name and name != '' and url and url != ''
       if key and key == ''
-        key = rand(36**5).to_s(36)
+        key = rand(36**3).to_s(36)
       end
       URLStore.set({name: name, key: key, url: url})
       redirect '/admin'
