@@ -16,17 +16,17 @@
             a href="/admin?sort=name&sort_order=#{@next_sort_order}" Name
           th.col-sm-2 Url
           th.col-sm-4 Target
-          th.col-sm-2 
+          th.col-sm-2
             a href="/admin?sort=date&sort_order=#{@next_sort_order}" Created On
           th.col-sm-1
             a href="/admin?sort=visits&sort_order=#{@next_sort_order}" Visit Count
       tbody
-        -@urls.each do |url|
+        -@shortened_url_collection.each do |shortened_url|
           tr
-            td= url['name']
+            td= shortened_url['name']
             td
-              a href="#{@base_url}/#{url['key']}" ="#{@readable_base_url}/#{url['key']}"
-            td= url['url']
-            td= Time.parse(url['created_at']).strftime("%d %b %Y %H:%M") if url['created_at']
-            td= url['counter']
+              a href="#{@base_url}/#{shortened_url['key']}" ="#{@readable_base_url}/#{shortened_url['key']}"
+            td= shortened_url['target']
+            td= Time.parse(shortened_url['created_at']).strftime("%d %b %Y %H:%M") if shortened_url['created_at']
+            td= shortened_url['visit_count']
 

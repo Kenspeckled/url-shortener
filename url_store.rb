@@ -4,25 +4,23 @@ class URLStore
   @redis = Redis.new
 
   def self.find(key)
-    @redis.hget("key:#{key}", "url")
+    @redis.hgetall("key:#{key}")
   end
 
   def self.set(args)
     name = args[:name]
     key = args[:key]
-    url = args[:url]
-    if !name or !key or !url
+    target = args[:target]
+    if !name or !key or !target
       raise "Not all values provided"
     end
-    @redis.sadd("keys", key) 
-    @redis.hset("key:#{key}", "name", name)
-    @redis.hset("key:#{key}", "url", url)
-    @redis.hset("key:#{key}", "created_at", Time.now)
+    @redis.sadd("keys", key)
+    @redis.hmset("key:#{key}", "name", name, "target", target, "created_at", Time.now)
   end
 
   def self.get_all
     @redis.smembers("keys").map do |key|
-      url_hash = @redis.hgetall("key:#{key}")
+      url_hash = self.find(key)
       url_hash['key'] = key
       url_hash
     end

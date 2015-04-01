@@ -26,12 +26,11 @@ class URLShortener < Sinatra::Base
   end
 
   get /(\w+)/ do
-    shortened_url = params['captures'].first
-    full_url = URLStore.find(shortened_url)
-    if full_url
-      Analytics.add_to_counter(shortened_url)
-      status 301
-      redirect full_url
+    key = params['captures'].first
+    target = URLStore.find(key)['target']
+    if target
+      Analytics.add_to_visit_count(key)
+      redirect target
     else
       halt 404
     end
