@@ -12,7 +12,7 @@ class URLShortener < Sinatra::Base
   set :session_secret, config['session_secret']
 
   not_found do
-    "not found"
+    slim :'errors/404', layout: :'layouts/index'
   end
 
   use URLShortenerAdmin
@@ -27,10 +27,10 @@ class URLShortener < Sinatra::Base
 
   get /(\w+)/ do
     key = params['captures'].first
-    target = URLStore.find(key)['target']
-    if target
+    shortened_url_hash = URLStore.find(key)
+    if shortened_url_hash and shortened_url_hash['target']
       Analytics.add_to_visit_count(key)
-      redirect target
+      redirect shortened_url_hash['target']
     else
       halt 404
     end

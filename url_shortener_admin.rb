@@ -21,16 +21,16 @@ class URLShortenerAdmin < Sinatra::Base
   get '/admin' do
     @base_url = config['base_url'] || request.url.sub(request.path, "").sub("?#{request.query_string}", "")
     @readable_base_url = @base_url.to_s.sub("http://","").sub("https://","")
-    @urls = URLStore.get_all
+    @shortened_url_collection = URLStore.get_all
     if params['sort'] == 'name'
-      @urls.sort_by!{|v| v['name'].to_s.downcase }
+      @shortened_url_collection.sort_by!{|v| v['name'].to_s.downcase }
     elsif params['sort'] == 'date'
-      @urls.sort_by!{|v| v['created_at'] ? Time.parse(v['created_at']).to_i : 0  }
+      @shortened_url_collection.sort_by!{|v| v['created_at'] ? Time.parse(v['created_at']).to_i : 0  }
     elsif params['sort'] == 'visits'
-      @urls.sort_by!{|v| v['counter'].to_i }
+      @shortened_url_collection.sort_by!{|v| v['counter'].to_i }
     end
     if params['sort_order'] == 'desc'
-      @urls.reverse!
+      @shortened_url_collection.reverse!
       @next_sort_order = 'asc'
     else
       @next_sort_order = 'desc'
