@@ -1,12 +1,12 @@
 require 'sinatra/base'
 require 'yaml'
-require './url_shortener_admin'
-require './url_store.rb'
-require './analytics.rb'
+require_relative './url_shortener_admin'
+require_relative './url_store.rb'
+require_relative './analytics.rb'
 
 class URLShortener < Sinatra::Base
 
-  config = YAML.load_file('config.yml')
+  config = YAML.load_file(File.join(settings.root, 'config.yml'))
 
   enable :sessions
   set :session_secret, config['session_secret']

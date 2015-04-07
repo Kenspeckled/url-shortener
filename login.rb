@@ -1,5 +1,5 @@
 require 'sinatra/base'
-require './admin'
+require_relative './admin'
 
 class LogIn < Sinatra::Base
 
